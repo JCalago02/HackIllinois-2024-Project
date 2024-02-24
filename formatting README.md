@@ -1,19 +1,19 @@
 Formatting Conventions for all files<br>
 
-Start the documentation with\n
-/doc_start***/\n\n
+Start the documentation with<br>
+/doc_start***/<br>
 
-Use '@' to add tags to the documentation\n
-All of the tags (only category is required)\n
-@category - category of file\n
-@file - file name with extension\n
-@description- a simple description of what the file does\n
-@author- all of the authors or contributors\n\n
+Use '@' to add tags to the documentation<br>
+All of the tags (only category is required)<br>
+@category - category of file<br>
+@file - file name with extension<br>
+@description- a simple description of what the file does<br>
+@author- all of the authors or contributors<br>
 
-End every tag with '/'\n
-For example:\n
-@file testfile.py/\n\n
+End every tag with '/'<br>
+For example:<br>
+@file testfile.py/<br>
 
-End the documentation with\n
+End the documentation with<br>
 /doc_end***/
 
