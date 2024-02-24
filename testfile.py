@@ -7,4 +7,4 @@ doc_start/**
 doc_end**/
 '''
 
-print("hello world")
+print("hello world!")
