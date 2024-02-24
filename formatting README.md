@@ -1,4 +1,4 @@
-Formatting Conventions for all files\n\n
+Formatting Conventions for all files<br>
 
 Start the documentation with\n
 /doc_start***/\n\n
