@@ -1,0 +1,46 @@
+name: Commit History to JSON to Pages Branch
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Install requests
+        run: |
+          pip install requests
+
+      - name: Run the script and generate JSON
+        run: |
+          python to-json.py
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: gh-pages # Checkout 'gh-pages' branch to 'gh-pages' directory
+
+      - name: Copy file to gh-pages branch
+        run: |
+          cp data.json gh-pages/
+
+      - name: Commit and push to gh-pages branch
+        run: |
+          cd gh-pages
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add data.json
+          git commit -m "Update data.json"
+          git push origin gh-pages
