@@ -1,7 +1,7 @@
 Formatting Conventions for all files<br>
 
 Start the documentation with<br>
-/doc_start***/<br>
+/doc_start&&&/<br>
 
 Use '@' to add tags to the documentation<br>
 All of the tags (only category is required)<br>
@@ -15,5 +15,5 @@ For example:<br>
 @file testfile.py/<br>
 
 End the documentation with<br>
-/doc_end***/
+/doc_end&&&/
 

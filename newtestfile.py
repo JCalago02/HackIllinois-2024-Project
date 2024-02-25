@@ -1,11 +1,10 @@
 '''
-/doc_start***/
-@category Supplemental information/
+/doc_start&&&/
+@category A new category/
 @file newtestfile.py/
-@description a secondary file to demonstrate github actions/
-@author Maxwell Yang, Jericho Calago, Abhinav Khanduja/
-@date 2.24.24/
-/doc_end***/
+@description a file to demonstrate github actions/
+@author Maxwell Yang/
+/doc_end&&&/
 '''
 
 print("success")

@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-NOTION_API_KEY = 'secret_oQNXJ1hHm4tjPwhjFUB47fNkT19RQq8Vns8kZVwzBw3'
-PAGE_ID = 'e13eaf2a0dab409c84e4b541eee8a0c3'
-DATABASE_ID = 'b97ac1b4c573431bb43cba64d659bb97'
-
 import requests
 import json
 import base64
+import os
+from datetime import datetime
+from dotenv import load_dotenv
+
+NOTION_API_KEY = os.getenv("NOTION_API_KEY")
+PAGE_ID = os.getenv("PAGE_ID")
+DATABASE_ID = os.getenv("DATABASE_ID")
 
 def retrieve_page_blocks(page_id, headers):
     get_blocks_url = f"https://api.notion.com/v1/blocks/{page_id}/children"
@@ -17,7 +20,7 @@ def retrieve_page_blocks(page_id, headers):
         print(blocks_response.text)
         return []
 
-def update_or_create_content(page_id, headers, file, description):
+def update_or_create_content(page_id, headers, file, description, authors):
     existing_blocks = retrieve_page_blocks(page_id, headers)
     update_properties_url = f"https://api.notion.com/v1/pages/{page_id}"
     properties_data = {
@@ -193,7 +196,7 @@ def extractContent(curr_content):
   flags = []
   canCheck = False
   for term in terms:
-    if (term == "doc_start***"):
+    if (term == "doc_start&&&"):
       canCheck = True
     elif (canCheck == True):
       start = term.find('@')
@@ -204,7 +207,7 @@ def extractContent(curr_content):
         flags.append(flag)
         info = subterm[index + 1:]
         file_info.update({flag : info})
-    elif (term == "doc_end***"):
+    elif (term == "doc_end&&&"):
       canCheck = False
   return file_info, flags
 
