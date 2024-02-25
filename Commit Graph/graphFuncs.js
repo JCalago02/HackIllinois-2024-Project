@@ -1,37 +1,9 @@
 import { COLORS, ICONCOLORS, PAGECOLORS, makeOpaque } from "../Assets/colors.js";
 import { branchNumToColor, bubbleXCoords } from "./graphConstants.js";
-const commits = [
-    {message:"commit 1", branch:"Master", timestamp: 1},
-    {message:"create folder and setup for new feature super long and  aaaaaaaaaaaaamax", branch:"feature-branch", timestamp: 2},
-    {message:"redo readme", branch:"Master", timestamp: 3},
-    {message:"complete new feature", branch:"feature-branch", timestamp: 4},
-    {message:"fix bugs", branch:"feature-branch", timestamp: 5},
-    {message:"Add ANOTHER Feature", branch:"new-feature", timestamp: 6},
-    {message:"merge feature into main", branch:"feature-branch", timestamp:7, mergeInto:"Master"},
-    {message:"merge feature into main", branch:"new-feature", timestamp:8, mergeInto:"Master"},
-    {message:"commit 1", branch:"Master", timestamp: 1},
-    {message:"commit 1", branch:"gh-pages", timestamp: 1},
-    {message:"commit 1", branch:"Master", timestamp: 1},
-    {message:"commit 1", branch:"gh-pages", timestamp: 1},
-    {message:"commit 1", branch:"gh-pages", timestamp: 1},
-    {message:"commit 1", branch:"gh-pages", timestamp: 1},
-    {message:"commit 1", branch:"Master", timestamp: 1},
-    {message:"commit 1", branch:"new-feature", timestamp: 1},
-    {message:"commit 1", branch:"new-new-feature", timestamp: 1},
-    {message:"commit 1", branch:"new-new-feature", timestamp: 1},
-    {message:"commit 1", branch:"new-feature", timestamp: 1},
-    {message:"commit 1", branch:"Master", timestamp: 1},
-    {message:"commit 1", branch:"new-new-feature", timestamp: 1, mergeInto:"Master"},
-    {message:"commit 22", branch:"gh-pages", timestamp: 1},
-    {message:"commit 23", branch:"Master", timestamp: 1},
-    {message:"commit 24", branch:"Master", timestamp: 1},
-    {message:"commit 25", branch:"Master", timestamp: 1},
-    {message:"commit 26", branch:"Master", timestamp: 1},
-]
-
+import { fetchData } from "./cloudBucket.js";
 const RADIUS = 10;
 const textX = 220;
-const MAINBRANCH = "Master";
+const MAINBRANCH = "main";
 
 // list of all existing branches on visualization
 const currBranchSet = new Set();
@@ -167,48 +139,63 @@ function drawImage(x, y, url, ctx) {
 }
 
 // width: 100, height = 500
-function drawCommitGraph() {
-    // alert("aaaaaaaaaa")
-    const canvas = document.getElementById("graph-canvas");
-    const ctx = canvas.getContext('2d');
-    
-    ctx.fillStyle = PAGECOLORS.calloutGray;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.textBaseline = 'middle';
+async function drawCommitGraph() {
+    try {
+        const commits = await fetchData();
+        console.log(commits);
 
-    let rowY = 800;
-
-    // if needed: sort the commits based on timestamps
-    for (let i = 0; i < commits.length; i++) {
-        // grab current commit along with relevant properties
-        const currCommit = commits[i];
-        const isNewBranch = !currBranchSet.has(currCommit.branch);
-        const isMergeCommit = !!currCommit.mergeInto;
+        // alert("aaaaaaaaaa")
+        const canvas = document.getElementById("graph-canvas");
+        const ctx = canvas.getContext('2d');
         
-        let branchProperties = branchNameToProperties[isMergeCommit ? currCommit.mergeInto : currCommit.branch];
-        if (isNewBranch) {
-            branchProperties = processBranch(currCommit.branch);
-            if (currBranchSet.size !== 1) {
-                drawCheckoutArc(branchProperties.x, rowY, MAINBRANCH, branchProperties.color, ctx)
+        ctx.fillStyle = PAGECOLORS.calloutGray;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.textBaseline = 'middle';
+
+        let rowY = 800;
+
+        // if needed: sort the commits based on timestamps
+        for (let i = 0; i < commits.length; i++) {
+            // grab current commit along with relevant properties
+            const currCommit = commits[i];
+            const isNewBranch = !currBranchSet.has(currCommit.branch);
+            const isMergeCommit = currCommit.mergeInto.length != 0;
+            console.log("--------------------------------------------")
+            console.log(currCommit);
+
+            let branchProperties = branchNameToProperties[isMergeCommit ? currCommit.mergeInto : currCommit.branch];
+            if (isNewBranch) {
+                branchProperties = processBranch(currCommit.branch);
+                if (currBranchSet.size !== 1) {
+                    drawCheckoutArc(branchProperties.x, rowY, MAINBRANCH, branchProperties.color, ctx)
+                }
             }
-        }
-        // draw commit graph row (text, bubble, line, and box)
-        if (isMergeCommit) {
-            drawCommitArc(branchProperties.x, rowY,  currCommit.branch, ctx);
-            processBranchMerge(currCommit.branch);
-        }
-        drawCommitText(textX, rowY, currCommit.message, ctx);
-        drawCommitBubble(branchProperties.x, rowY, currCommit.user, branchProperties.color, ctx);
-        drawCommitLine(branchProperties.x, branchProperties.prevY, rowY, branchProperties.color, ctx);
-        drawCommitRectangle(branchProperties.x, rowY, branchProperties.color, ctx);
-        // drawImage(branchProperties.x, rowY, url, ctx);
-        // decrement y values
-        branchProperties.prevY = rowY;
-        branchProperties[currCommit.branch] = branchProperties;
-        rowY -= 30;
+
+            console.log(currCommit.branch + "-> " + branchProperties);
+            // draw commit graph row (text, bubble, line, and box)
+            if (isMergeCommit) {
+                console.log("is merge commit");
+                drawCommitArc(branchProperties.x, rowY,  currCommit.branch, ctx);
+                processBranchMerge(currCommit.branch);
+            }
+            drawCommitText(textX, rowY, currCommit.message, ctx);
+            drawCommitBubble(branchProperties.x, rowY, currCommit.user, branchProperties.color, ctx);
+            drawCommitLine(branchProperties.x, branchProperties.prevY, rowY, branchProperties.color, ctx);
+            drawCommitRectangle(branchProperties.x, rowY, branchProperties.color, ctx);
+            // drawImage(branchProperties.x, rowY, url, ctx);
+            // decrement y values
+            branchProperties.prevY = rowY;
+            branchProperties[currCommit.branch] = branchProperties;
+            rowY -= 30;
     }
+    } catch (error) {
+        console.log(error);
+    }
+    
 
 }
+
+
 
 
 
