@@ -21,6 +21,7 @@ jobs:
       - name: Install requests
         run: |
           pip install requests
+          pip install python-dotenv
 
       - name: Run the script and generate JSON
         run: |
@@ -42,5 +43,5 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add demofile.json
-          git commit -m "Update data.json"
+          git commit -m "Update demofile.json"
           git push origin gh-pages
