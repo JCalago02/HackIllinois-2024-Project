@@ -189,7 +189,8 @@ def get_commits(user: str, repo: str, branch: str, access_token: str = '') -> li
                 merge_into=mivar,
                 sha= commit_info['sha']
             )
-            
+            if(commit_data.branch == 'main' and commit_data.merge_into != ''):
+                continue
             commits_list.append(commit_data)
 
     else: 
