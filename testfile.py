@@ -11,3 +11,4 @@ def twoSum(nums, target):
     return []  # No solution found
 
 print(twoSum([1, 2, 3, 4, 5], 5))
+print(twoSum([1, 2, 3, 4, 5], 5))
