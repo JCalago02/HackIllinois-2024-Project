@@ -37,14 +37,23 @@ jobs:
           ref: gh-pages
           path: gh-pages # Checkout 'gh-pages' branch to 'gh-pages' directory
 
+      - name: Fetch and merge changes from the remote branch
+        run: |
+          cd gh-pages
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git fetch origin gh-pages
+          git merge origin/gh-pages --allow-unrelated-histories -m "Merge remote-tracking branch 'origin/gh-pages'"
+
       - name: Copy file to gh-pages branch
         run: |
           cp demofile.json gh-pages/
-          git pull
           
       - name: Commit and Push Changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: "gh-pages"
-          directory: .
+        run: |
+          cd gh-pages
+          git add .
+          git commit -m "Update demofile.json" || echo "No changes to commit"
+          git push origin gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
