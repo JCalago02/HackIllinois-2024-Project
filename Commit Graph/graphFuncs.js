@@ -148,8 +148,7 @@ async function drawCommitGraph() {
             const currCommit = commits[i];
             const isNewBranch = !currBranchSet.has(currCommit.branch);
             const isMergeCommit = currCommit.mergeInto.length != 0;
-            console.log("--------------------------------------------")
-            console.log(currCommit);
+
             if (!authorToColor.has(currCommit.author)) {
                 authorToColor.set(currCommit.author, CONTRIBUTORCOLORS[authorToColor.size])
             }
@@ -162,10 +161,8 @@ async function drawCommitGraph() {
                 }
             }
 
-            console.log(currCommit.branch + "-> " + branchProperties);
             // draw commit graph row (text, bubble, line, and box)
             if (isMergeCommit) {
-                console.log("is merge commit");
                 drawCommitArc(branchProperties.x, rowY,  currCommit.branch, ctx);
                 processBranchMerge(currCommit.branch);
             }
