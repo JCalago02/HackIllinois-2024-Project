@@ -196,7 +196,7 @@ def extractContent(curr_content):
   flags = []
   canCheck = False
   for term in terms:
-    if (term == "doc_start***"):
+    if (term == "doc_start&&&"):
       canCheck = True
     elif (canCheck == True):
       start = term.find('@')
@@ -207,7 +207,7 @@ def extractContent(curr_content):
         flags.append(flag)
         info = subterm[index + 1:]
         file_info.update({flag : info})
-    elif (term == "doc_end***"):
+    elif (term == "doc_end&&&"):
       canCheck = False
   return file_info, flags
 

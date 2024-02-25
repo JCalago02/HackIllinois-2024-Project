@@ -1,10 +1,10 @@
 '''
-/doc_start***/
+/doc_start&&&/
 @category Backend Folders/
 @file to-json.py/
 @description a file that writes commit history to json file/
 @author Abhinav Khanduja/
-/doc_end***/
+/doc_end&&&/
 '''
 from dataclasses import dataclass
 from datetime import *
@@ -16,7 +16,7 @@ load_dotenv()
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 USER = os.getenv("USER")
 REPO = os.getenv("REPO")
-#print(ACCESS_TOKEN)
+print(ACCESS_TOKEN)
 @dataclass
 class commit:
     def __init__(self, message: str, author: str, avatar: str, branch: str, commit_time: datetime, merge_into: str, sha: str):
