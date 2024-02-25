@@ -40,6 +40,7 @@ jobs:
       - name: Copy file to gh-pages branch
         run: |
           cp demofile.json gh-pages/
+          git pull
           
       - name: Commit and Push Changes
         uses: ad-m/github-push-action@master
