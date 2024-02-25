@@ -5,6 +5,7 @@ import base64
 import os
 from datetime import datetime
 from dotenv import load_dotenv
+from openai import OpenAI
 
 NOTION_API_KEY = os.getenv("NOTION_API_KEY")
 PAGE_ID = os.getenv("PAGE_ID")
@@ -211,9 +212,29 @@ def extractContent(curr_content):
       canCheck = False
   return file_info, flags
 
+client = OpenAI(
+    api_key= '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'
+)
+
+def get_completion(prompt, model="gpt-3.5-turbo"):
+    response = client.chat.completions.create(
+        messages=[{
+            "role": "user", 
+            "content": prompt
+        }
+    ],
+    model="gpt-3.5-turbo"
+    )
+    gen_message = response.choices[0].message.content
+    return gen_message
 for i in range(0, len(all_content)):
   now = datetime.now()
   file_info, flags = extractContent(all_content[i])
+  curr = all_content[i]
+  if (not file_info):
+    prompt = f"Replace the parentheses in the following formatting with what I ask you to. The formatting is: \n /doc_start&&&/ \n @category (category)/ \n @file (filename)/ \n @description (description of code) @author (author)/ \n /doc_end&&&/ \n. Replace (category) with either Backend, Frontend, or textfile/random depending on the code of the file i give you. Replace (filename) with testfile.py. Replace (description of code) with the description of what the code in the file does, emphasizing the main functionality, limited to 50 words, but you can write less. Replace (author) with gpt-3.5-turbo. DO NOT replace the names of the categories immediately following the @ at the beginning of each line. Keep the slashes after the line as well. The code to analyze is {curr}. Don't talk like a person, only give me the documentation formatting I asked for. Get rid of the parentheses as well"
+    response = get_completion(prompt)
+    file_info, flags = extractContent(response)
   tag = ''
   description = ''
   file = ''
