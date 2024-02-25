@@ -6,13 +6,17 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    env:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      REPO: ${{ secrets.REPO }}
+      USER: ${{ secrets.USER }}
+      
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v2
         with:
           ref: main
-
+          
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -33,15 +37,23 @@ jobs:
           ref: gh-pages
           path: gh-pages # Checkout 'gh-pages' branch to 'gh-pages' directory
 
-      - name: Copy file to gh-pages branch
-        run: |
-          cp demofile.json gh-pages/
-
-      - name: Commit and push to gh-pages branch
+      - name: Fetch and merge changes from the remote branch
         run: |
           cd gh-pages
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add demofile.json
-          git commit -m "Update demofile.json"
+          git fetch origin gh-pages
+          git merge origin/gh-pages --allow-unrelated-histories -m "Merge remote-tracking branch 'origin/gh-pages'"
+
+      - name: Copy file to gh-pages branch
+        run: |
+          cp demofile.json gh-pages/
+          
+      - name: Commit and Push Changes
+        run: |
+          cd gh-pages
+          git add .
+          git commit -m "Update demofile.json" || echo "No changes to commit"
           git push origin gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
