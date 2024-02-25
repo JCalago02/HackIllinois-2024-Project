@@ -1,6 +1,13 @@
+/*
+doc_start&&&/
+@category Frontend Component
+@file graphFuncs.js
+@description 
+
+*/
 import { COLORS, ICONCOLORS, PAGECOLORS, makeOpaque } from "../Assets/colors.js";
 import { branchNumToColor, bubbleXCoords } from "./graphConstants.js";
-import { fetchData } from "./cloudBucket.js";
+import fetchJSONData from "./fetchJSON.js";
 const RADIUS = 10;
 const textX = 220;
 const MAINBRANCH = "main";
@@ -141,7 +148,7 @@ function drawImage(x, y, url, ctx) {
 // width: 100, height = 500
 async function drawCommitGraph() {
     try {
-        const commits = await fetchData();
+        const commits = await fetchJSONData();
         console.log(commits);
 
         // alert("aaaaaaaaaa")
