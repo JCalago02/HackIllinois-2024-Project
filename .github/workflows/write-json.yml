@@ -40,15 +40,11 @@ jobs:
       - name: Copy file to gh-pages branch
         run: |
           cp demofile.json gh-pages/
-      
-      - name: Set permissions
-        run: sudo chmod -R 777 gh-pages
-        
-      - name: Commit and push to gh-pages branch
-        run: |
-          cd gh-pages
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add demofile.json
-          git commit -m "Update demofile.json"
-          git push origin gh-pages
+
+      - name: Commit and Push Changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          branch: gh-pages
+          directory: .
+          commit_message: "Update demofile.json"
