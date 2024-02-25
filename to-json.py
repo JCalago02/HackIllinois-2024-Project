@@ -1,6 +1,6 @@
 '''
 /doc_start&&&/
-@category Backend Folders/
+@category Github Actions Script/
 @file to-json.py/
 @description a file that writes commit history to json file/
 @author Abhinav Khanduja/
@@ -71,7 +71,7 @@ def get_merge_commits_with_branches(owner, repo, sha, auth_token=None):
     merge_commits_info = []
     page = 1
     per_page = 100
-
+    ting = ""
     while True:
         url = f"https://api.github.com/repos/{owner}/{repo}/commits"
         params = {"per_page": per_page, "page": page}
