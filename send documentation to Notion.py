@@ -18,7 +18,7 @@ def retrieve_page_blocks(page_id, headers):
         print(blocks_response.text)
         return []
 
-def update_or_create_content(page_id, headers, file, description):
+def update_or_create_content(page_id, headers, file, description, authors):
     existing_blocks = retrieve_page_blocks(page_id, headers)
     update_properties_url = f"https://api.notion.com/v1/pages/{page_id}"
     properties_data = {
