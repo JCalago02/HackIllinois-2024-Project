@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-NOTION_API_KEY = 'secret_oQNXJ1hHm4tjPwhjFUB47fNkT19RQq8Vns8kZVwzBw3'
-PAGE_ID = 'e13eaf2a0dab409c84e4b541eee8a0c3'
-DATABASE_ID = 'b97ac1b4c573431bb43cba64d659bb97'
-
 import requests
 import json
 import base64
+import os
 from datetime import datetime
+from dotenv import load_dotenv
+
+NOTION_API_KEY = os.getenv("NOTION_API_KEY")
+PAGE_ID = os.getenv("PAGE_ID")
+DATABASE_ID = os.getenv("DATABASE_ID")
 
 def retrieve_page_blocks(page_id, headers):
     get_blocks_url = f"https://api.notion.com/v1/blocks/{page_id}/children"
