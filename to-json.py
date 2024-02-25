@@ -8,7 +8,15 @@
 '''
 from dataclasses import dataclass
 from datetime import *
+from dotenv import load_dotenv
+import os
 import json
+
+load_dotenv()
+ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
+USER = os.getenv("USER")
+REPO = os.getenv("REPO")
+#print(ACCESS_TOKEN)
 @dataclass
 class commit:
     def __init__(self, message: str, author: str, avatar: str, branch: str, commit_time: datetime, merge_into: str, sha: str):
@@ -113,11 +121,6 @@ def get_branches_for_commit(user: str, repo: str, commit_sha: str, access_token:
         raise Exception(f"Failed to fetch branches for commit {commit_sha}: {response.content}")
 
     return branches
-    
-    
-ACCESS_TOKEN = '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'
-USER = 'JCalago02'
-REPO = 'HackIllinois-2024-Project'
 
 def get_pull_requests(user, repo, state='all'):
     """
