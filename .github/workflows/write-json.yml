@@ -47,4 +47,3 @@ jobs:
           github_token: ${{ secrets.ACCESS_TOKEN }}
           branch: gh-pages
           directory: .
-          commit_message: "Update demofile.json"
