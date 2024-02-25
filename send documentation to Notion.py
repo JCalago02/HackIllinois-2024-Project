@@ -223,11 +223,12 @@ for i in range(0, len(all_content)):
   if (tag != ''):
     new_entry = add_or_update_entry_to_notion_database(tag, file, description, authors, last_edited)
 
-from datetime import datetime
-now = datetime.now()
-tag = "backend comp"
-description = "this change should be published!"
-file = "test2.py"
-authors = ["Maxwell Yang", "Jericho Calago!", "Abhinav Khanduja!"]
-last_edited = str(now)[:19]
-new_entry = add_or_update_entry_to_notion_database(tag, file, description, authors, last_edited)
+# A dummy test case
+# from datetime import datetime
+# now = datetime.now()
+# tag = "backend comp"
+# description = "this change should be published!"
+# file = "test2.py"
+# authors = ["Maxwell Yang", "Jericho Calago!", "Abhinav Khanduja!"]
+# last_edited = str(now)[:19]
+# new_entry = add_or_update_entry_to_notion_database(tag, file, description, authors, last_edited)
