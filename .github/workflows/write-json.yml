@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: main
+          
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -39,7 +40,10 @@ jobs:
       - name: Copy file to gh-pages branch
         run: |
           cp demofile.json gh-pages/
-
+      
+      - name: Set permissions
+        run: sudo chmod -R 777 gh-pages
+        
       - name: Commit and push to gh-pages branch
         run: |
           cd gh-pages
