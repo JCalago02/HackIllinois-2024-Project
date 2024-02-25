@@ -1,16 +1,11 @@
-/*
-doc_start&&&/
-@category Frontend Component
-@file graphFuncs.js
-@description 
-
-*/
-import { COLORS, ICONCOLORS, PAGECOLORS, makeOpaque } from "../Assets/colors.js";
+import { COLORS, ICONCOLORS, PAGECOLORS, makeOpaque, CONTRIBUTORCOLORS } from "../Assets/colors.js";
 import { branchNumToColor, bubbleXCoords } from "./graphConstants.js";
 import fetchJSONData from "./fetchJSON.js";
 const RADIUS = 10;
 const textX = 220;
 const MAINBRANCH = "main";
+// map of contributor names to colors
+const authorToColor = new Map();
 
 // list of all existing branches on visualization
 const currBranchSet = new Set();
@@ -67,15 +62,16 @@ function drawCommitLine(branchX, prevY, currY, color, ctx) {
     return;
 }
 
-function drawCommitRectangle(x, y, color, ctx) {
+function drawCommitRectangle(x, y, color, authorColor, ctx) {
     const endX = textX - 5 - x;
     ctx.beginPath();
     ctx.fillStyle = makeOpaque(color);
     ctx.fillRect(x, y - RADIUS, endX, 2 * RADIUS, true);
     ctx.stroke();
 
-    ctx.fillStyle = color;
-    ctx.fillRect(textX - 5, y-RADIUS, 2, 2 * RADIUS, true)
+    console.log(authorColor);
+    ctx.fillStyle = authorColor;
+    ctx.fillRect(textX - 10, y-RADIUS, 4, 2 * RADIUS, true)
     ctx.stroke();
 }
 
@@ -130,20 +126,6 @@ function drawCheckoutArc(startX, startY, mainBranch, color, ctx) {
     drawArc(startX, startY, mainBranchParameters.x, mainBranchParameters.prevY, color, ctx)
 }
 
-function drawImage(x, y, url, ctx) {
-    const base_image = new Image();
-    base_image.src = url;
-    base_image.onload = () => {
-        // Create a circular clipping path
-        ctx.beginPath();
-        ctx.arc(x, y, 9, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.clip();
-        
-        // Draw the scaled-down image
-        ctx.drawImage(base_image, x - 9, y - 9, 18, 18); // Center the image within the circle
-    }
-}
 
 // width: 100, height = 500
 async function drawCommitGraph() {
@@ -160,7 +142,6 @@ async function drawCommitGraph() {
         ctx.textBaseline = 'middle';
 
         let rowY = 800;
-
         // if needed: sort the commits based on timestamps
         for (let i = 0; i < commits.length; i++) {
             // grab current commit along with relevant properties
@@ -169,6 +150,9 @@ async function drawCommitGraph() {
             const isMergeCommit = currCommit.mergeInto.length != 0;
             console.log("--------------------------------------------")
             console.log(currCommit);
+            if (!authorToColor.has(currCommit.author)) {
+                authorToColor.set(currCommit.author, CONTRIBUTORCOLORS[authorToColor.size])
+            }
 
             let branchProperties = branchNameToProperties[isMergeCommit ? currCommit.mergeInto : currCommit.branch];
             if (isNewBranch) {
@@ -188,13 +172,12 @@ async function drawCommitGraph() {
             drawCommitText(textX, rowY, currCommit.message, ctx);
             drawCommitBubble(branchProperties.x, rowY, currCommit.user, branchProperties.color, ctx);
             drawCommitLine(branchProperties.x, branchProperties.prevY, rowY, branchProperties.color, ctx);
-            drawCommitRectangle(branchProperties.x, rowY, branchProperties.color, ctx);
-            // drawImage(branchProperties.x, rowY, url, ctx);
+            drawCommitRectangle(branchProperties.x, rowY, branchProperties.color, authorToColor.get(currCommit.author), ctx);
             // decrement y values
             branchProperties.prevY = rowY;
             branchProperties[currCommit.branch] = branchProperties;
             rowY -= 30;
-    }
+        }
     } catch (error) {
         console.log(error);
     }

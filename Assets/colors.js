@@ -11,17 +11,20 @@ export const ICONCOLORS = {
 }
 
 export const COLORS = {
-    lightGray : "rgb(55, 55, 55)",
-    gray : "rgb(90, 90, 90)",
-    brown : "rgb(96, 59, 44)", 
     red : "rgb(110, 54, 48)", 
     orange : "rgb(133, 76, 29)",
     yellow : "rgb(137, 99, 42)", 
     green : "rgb(43, 89, 63)", 
     blue : "rgb(40, 69, 108)", 
     purple : "rgb(73, 47, 100)",
-    pink : "rgb(105, 49, 76)"
+    pink : "rgb(105, 49, 76)",
+    lightGray : "rgb(55, 55, 55)",
+    gray : "rgb(90, 90, 90)",
+    brown : "rgb(96, 59, 44)", 
 }
+
+
+export const CONTRIBUTORCOLORS = ["rgb(110, 54, 48)", "rgb(133, 76, 29)", "rgb(137, 99, 42)", "rgb(43, 89, 63)", "rgb(40, 69, 108)", "rgb(73, 47, 100)"]
 
 export const PAGECOLORS = {
     subIconGray : "rgb(134, 134, 134)",
